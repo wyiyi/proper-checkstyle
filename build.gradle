@@ -6,10 +6,10 @@ apply plugin: 'findbugs'
 
 repositories {
     maven {
-        url "${nexusUrl}/repository/maven-public"
+        url "${System.getenv('nexusUrl')}/repository/maven-public"
         credentials(PasswordCredentials) {
-            username = nexusUsername
-            password = nexusPassword
+            username = System.getenv('nexusUsername')
+            password = System.getenv('nexusPassword')
         }
     }
 }
@@ -17,11 +17,11 @@ repositories {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "${nexusUrl}/repository/maven-releases") {
-                authentication(userName: nexusUsername, password: nexusPassword)
+            repository(url: "${System.getenv('nexusUrl')}/repository/maven-releases") {
+                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
             }
-            snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
-                authentication(userName: nexusUsername, password: nexusPassword)
+            snapshotRepository(url: "${System.getenv('nexusUrl')}/repository/maven-snapshots") {
+                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
             }
         }
     }
