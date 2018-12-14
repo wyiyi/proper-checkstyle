@@ -16,6 +16,7 @@ public class TestController {
         return "";
     }
 
+    @GetMapping
     public String delete(String id) {
         return "";
     }
