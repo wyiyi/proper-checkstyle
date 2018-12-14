@@ -30,7 +30,9 @@ public class SwaggerCheck extends AbstractCheck {
             if (AnnotationUtil.containsAnnotation(ast, anno)) {
                 return;
             } else {
-                String message = "Failed！The methods no have swagger annotation";
+                String message = "Failed！The methods no have swagger annotation [" + ast.getText() + "]";
+                System.out.println("===== HINEX TEST =====");
+                log(ast.getLineNo(), "HINEX_KEY_TEST");
                 log(ast.getLineNo(), message);
             }
         }
