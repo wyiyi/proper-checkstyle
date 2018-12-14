@@ -16,6 +16,10 @@ public class SwaggerCheck extends AbstractCheck {
         this.anno = anno;
     }
 
+    public void setFilter(String filter) {
+        this.filter = filter;
+    }
+
     @Override
     public int[] getDefaultTokens() {
         return new int[]{TokenTypes.METHOD_DEF};
