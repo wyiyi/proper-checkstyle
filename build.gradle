@@ -32,6 +32,13 @@ tasks.withType(FindBugs) {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+check.dependsOn jacocoTestReport
+
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
