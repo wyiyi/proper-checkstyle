@@ -5,7 +5,26 @@ apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 
 repositories {
-    mavenCentral()
+    maven {
+        url "${nexusUrl}/repository/maven-public"
+        credentials(PasswordCredentials) {
+            username = nexusUsername
+            password = nexusPassword
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${nexusUrl}/repository/maven-releases") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+            snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+        }
+    }
 }
 
 sourceCompatibility = 1.8
