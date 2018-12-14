@@ -1,6 +1,8 @@
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
 
 repositories {
     maven {
@@ -34,4 +36,8 @@ version = '0.1.0-SNAPSHOT'
 dependencies {
         implementation 'com.puppycrawl.tools:checkstyle:8.14'
     testImplementation 'junit:junit:4.12'
+}
+
+checkstyle {
+    toolVersion = '8.14'
 }
