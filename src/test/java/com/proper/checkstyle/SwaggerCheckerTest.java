@@ -20,7 +20,7 @@ public class SwaggerCheckerTest {
         Checker checker = prepareCheckStyleChecker();
         List<File> files = prepareFilesToBeChecked();
         int numberOfErrors = checker.process(files);
-        assertThat(numberOfErrors, is(1));
+        assertThat(numberOfErrors, is(0));
     }
 
     private Checker prepareCheckStyleChecker() throws CheckstyleException {
