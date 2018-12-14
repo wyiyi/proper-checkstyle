@@ -8,19 +8,6 @@ repositories {
     mavenCentral()
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: "${System.getenv('nexusUrl')}/repository/maven-releases") {
-                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
-            }
-            snapshotRepository(url: "${System.getenv('nexusUrl')}/repository/maven-snapshots") {
-                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
-            }
-        }
-    }
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -34,4 +21,26 @@ dependencies {
 
 checkstyle {
     toolVersion = '8.14'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${System.getenv('nexusUrl')}/repository/maven-releases") {
+                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
+            }
+            snapshotRepository(url: "${System.getenv('nexusUrl')}/repository/maven-snapshots") {
+                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
+            }
+        }
+    }
 }
