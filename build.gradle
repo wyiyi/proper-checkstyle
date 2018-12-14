@@ -11,11 +11,11 @@ repositories {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "${nexusUrl}/repository/maven-releases") {
-                authentication(userName: nexusUsername, password: nexusPassword)
+            repository(url: "${System.getenv('nexusUrl')}/repository/maven-releases") {
+                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
             }
             snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
-                authentication(userName: nexusUsername, password: nexusPassword)
+                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
             }
         }
     }
