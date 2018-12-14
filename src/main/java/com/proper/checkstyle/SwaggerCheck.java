@@ -9,10 +9,15 @@ import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 public class SwaggerCheck extends AbstractCheck {
     private static final String SWAGGER_ANNOTATION = "ApiOperation";
     private String anno = SWAGGER_ANNOTATION;
-    private static final String filter = "Controller.java";
+    private static final String FILTER = "Controller.java";
+    private String filter = FILTER;
 
     public void setAnno(String anno) {
         this.anno = anno;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
     }
 
     @Override
