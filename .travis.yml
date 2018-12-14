@@ -5,3 +5,6 @@ jdk: openjdk8
 branches:
   only:
     - master
+
+after_success:
+  - git upload
