@@ -5,23 +5,17 @@ apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 
 repositories {
-    maven {
-        url "${System.getenv('nexusUrl')}/repository/maven-public"
-        credentials(PasswordCredentials) {
-            username = System.getenv('nexusUsername')
-            password = System.getenv('nexusPassword')
-        }
-    }
+    mavenCentral()
 }
 
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "${System.getenv('nexusUrl')}/repository/maven-releases") {
-                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
+            repository(url: "${nexusUrl}/repository/maven-releases") {
+                authentication(userName: nexusUsername, password: nexusPassword)
             }
-            snapshotRepository(url: "${System.getenv('nexusUrl')}/repository/maven-snapshots") {
-                authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
+            snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
+                authentication(userName: nexusUsername, password: nexusPassword)
             }
         }
     }
