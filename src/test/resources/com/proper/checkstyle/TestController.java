@@ -16,6 +16,7 @@ public class TestController {
         return "";
     }
 
+    @ApiOperation("wa‍")
     public String delete(String id) {
         return "";
     }
