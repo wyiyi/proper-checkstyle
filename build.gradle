@@ -14,7 +14,7 @@ uploadArchives {
             repository(url: "${System.getenv('nexusUrl')}/repository/maven-releases") {
                 authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
             }
-            snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
+            snapshotRepository(url: "${System.getenv('nexusUrl')}/repository/maven-snapshots") {
                 authentication(userName: System.getenv('nexusUsername'), password: System.getenv('nexusPassword'))
             }
         }
