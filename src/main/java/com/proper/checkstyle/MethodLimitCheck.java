@@ -5,8 +5,7 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 public class MethodLimitCheck extends AbstractCheck {
-    private static final int DEFAULT_MAX = 30;
-    private int max = DEFAULT_MAX;
+    private int max = Instance.DEFAULT_MAX;
 
     public void setMax(int max) {
         this.max = max;
