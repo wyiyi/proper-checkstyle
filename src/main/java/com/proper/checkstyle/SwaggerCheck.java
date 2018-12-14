@@ -9,7 +9,7 @@ import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 public class SwaggerCheck extends AbstractCheck {
     private static final String SWAGGER_ANNOTATION = "ApiOperation";
     private String anno = SWAGGER_ANNOTATION;
-    private static final String Filter_Controller = "Controller.java";
+    private static final String filter = "Controller.java";
 
     public void setAnno(String anno) {
         this.anno = anno;
@@ -24,7 +24,7 @@ public class SwaggerCheck extends AbstractCheck {
     public void visitToken(DetailAST ast) {
         FileContents fileContents = getFileContents();
         String str = fileContents.getFileName();
-        if (str.endsWith(Filter_Controller)) {
+        if (str.endsWith(filter)) {
             if (AnnotationUtil.containsAnnotation(ast, anno)) {
                 return;
             } else {
