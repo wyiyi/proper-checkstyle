@@ -22,7 +22,7 @@ public class SwaggerCheckerTest {
 
     @Test
     public void test() throws CheckstyleException {
-        assertThat(checker.process(files), is(0));
+        assertThat(checker.process(files), is(5));
     }
 
     @Before
@@ -48,12 +48,16 @@ public class SwaggerCheckerTest {
     }
 
     private List<File> prepareFilesToBeChecked() {
-        String testFileName = "TestController.java";
-        URL testFileUrl = getClass().getResource(testFileName);
-        File testFile = new File(testFileUrl.getFile());
         List<File> files = new ArrayList<>();
-        files.add(testFile);
+        files.add(getFile("PassController.java"));
+        files.add(getFile("NotPassController.java"));
+        files.add(getFile("BeFiltered.java"));
         return files;
+    }
+
+    private File getFile(String name) {
+        URL testFileUrl = getClass().getResource(name);
+        return new File(testFileUrl.getFile());
     }
 
 }
