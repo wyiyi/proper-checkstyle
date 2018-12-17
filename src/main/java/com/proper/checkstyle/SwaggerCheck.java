@@ -3,6 +3,9 @@ package com.proper.checkstyle;
 import com.puppycrawl.tools.checkstyle.api.*;
 import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 
+/**
+ * 校验Controller.java 文件中是否包含swagger的注解
+ */
 public class SwaggerCheck extends AbstractCheck {
 
     private String anno = Instance.SWAGGER_ANNOTATION;
@@ -31,10 +34,14 @@ public class SwaggerCheck extends AbstractCheck {
     @Override
     public void visitToken(DetailAST ast) {
         String str = getFileContents().getFileName();
+        // filter Controller.java file
         if (str.endsWith(filter)) {
+            // find all annotations types is ANNOTATION by tree node
             DetailAST child = detail(ast);
             final DetailAST detailAST = child.getFirstChild();
             final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
+            // while controller contains RequestMapping annotation, must have annotation 'ApiOperation'
+            // otherwise,report error, log message!
             typeValue(name, ast);
         }
     }
