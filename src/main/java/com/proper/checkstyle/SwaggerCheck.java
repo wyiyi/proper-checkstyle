@@ -41,7 +41,7 @@ public class SwaggerCheck extends AbstractCheck {
             final DetailAST detailAST = child.getFirstChild();
             final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
             // while controller contains RequestMapping annotation, must have annotation 'ApiOperation'
-            // otherwise,report error, log message!
+            // otherwise,report error, log message
             typeValue(name, ast);
         }
     }
