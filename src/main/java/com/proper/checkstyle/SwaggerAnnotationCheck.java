@@ -6,7 +6,7 @@ import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 /**
  * 校验以Controller.java 结尾的文件中是否包含swagger的注解
  */
-public class SwaggerCheck extends AbstractCheck {
+public class SwaggerAnnotationCheck extends AbstractCheck {
 
     private String anno = Instance.SWAGGER_ANNOTATION;
 
