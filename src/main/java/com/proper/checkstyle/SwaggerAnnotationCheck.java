@@ -5,6 +5,7 @@ import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 
 /**
  * 校验以Controller.java 结尾的文件中是否包含swagger的注解
+ * 仅检查通过注解方式配置的 controller，不检查 xml 方式配置的 controller
  */
 public class SwaggerAnnotationCheck extends AbstractCheck {
 
