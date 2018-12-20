@@ -71,7 +71,7 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
             if (AnnotationUtil.containsAnnotation(ast, anno)) {
                 return;
             } else {
-                String message = "Failed！The methods no have swagger annotation [" + ast.getText() + "]";
+                String message = "There must be swagger annotation [" + ast.getText() + "] on the method";
                 log(ast.getLineNo(), message);
             }
         }
