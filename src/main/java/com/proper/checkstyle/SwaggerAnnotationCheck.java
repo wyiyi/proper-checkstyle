@@ -1,6 +1,9 @@
 package com.proper.checkstyle;
 
-import com.puppycrawl.tools.checkstyle.api.*;
+import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
+import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.FullIdent;
+import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 
 /**
@@ -9,41 +12,48 @@ import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
  */
 public class SwaggerAnnotationCheck extends AbstractCheck {
 
-    private String anno = Instance.SWAGGER_ANNOTATION;
+    public String anno = "ApiOperation";
 
-    private String filter = Instance.FILTER;
+    public String restController = "RestController";
 
-    private String mapping = Instance.REQUEST_MAPPING;
+    public String controller = "Controller";
 
-    public void setAnno(String anno) {
-        this.anno = anno;
-    }
+    public String api = "Api";
 
-    public void setFilter(String filter) {
-        this.filter = filter;
-    }
-
-    public void setMapping(String mapping) {
-        this.mapping = mapping;
-    }
+    public String mapping = "Mapping";
 
     @Override
     public int[] getDefaultTokens() {
-        return new int[]{TokenTypes.METHOD_DEF};
+        return new int[]{TokenTypes.CLASS_DEF, TokenTypes.METHOD_DEF};
     }
 
     @Override
     public void visitToken(DetailAST ast) {
-        String str = getFileContents().getFileName();
-        // filter Controller.java file
-        if (str.endsWith(filter)) {
-            // find all annotations types is ANNOTATION by tree node
-            DetailAST child = detail(ast);
-            final DetailAST detailAST = child.getFirstChild();
-            final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
-            // while controller contains RequestMapping annotation, must have annotation 'ApiOperation'
-            // otherwise,report error, log message
-            typeValue(name, ast);
+        if (ast.getType() == TokenTypes.CLASS_DEF) {
+            if (AnnotationUtil.containsAnnotation(ast, restController) || AnnotationUtil.containsAnnotation(ast, controller)) {
+                if (AnnotationUtil.containsAnnotation(ast, api)) {
+                    return;
+                }
+            } else {
+                String message = "Failed！The class no have swagger annotation [" + ast.getText() + "]";
+                log(ast.getLineNo(), message);
+            }
+        } else if (ast.getType() == TokenTypes.METHOD_DEF) {
+            for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
+                if (child.getType() == TokenTypes.ANNOTATION) {
+                    final DetailAST detailAST = child.getFirstChild();
+                    final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
+                    if (name.endsWith(mapping)) {
+                        if (AnnotationUtil.containsAnnotation(ast, anno)) {
+                            return;
+                        } else {
+                            String message = "Failed！The methods no have swagger annotation [" + ast.getText() + "]";
+                            log(ast.getLineNo(), message);
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 
@@ -55,27 +65,6 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
     @Override
     public int[] getRequiredTokens() {
         return new int[0];
-    }
-
-    private DetailAST detail(DetailAST ast) {
-        DetailAST holder = AnnotationUtil.getAnnotationHolder(ast);
-        for (DetailAST child = holder.getFirstChild(); child != null; child = child.getNextSibling()) {
-            if (child.getType() == TokenTypes.ANNOTATION) {
-                return child;
-            }
-        }
-        return holder;
-    }
-
-    private void typeValue(String name, DetailAST ast) {
-        if (name.endsWith(mapping)) {
-            if (AnnotationUtil.containsAnnotation(ast, anno)) {
-                return;
-            } else {
-                String message = "There must be swagger annotation [" + ast.getText() + "] on the method";
-                log(ast.getLineNo(), message);
-            }
-        }
     }
 
 }

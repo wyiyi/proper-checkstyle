@@ -3,6 +3,8 @@ package com.proper.checkstyle;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@Api(tags = "/controller")
+@Controller
 public class NotPassController {
 
     @GetMapping

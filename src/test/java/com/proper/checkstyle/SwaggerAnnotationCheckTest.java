@@ -20,7 +20,7 @@ public class SwaggerAnnotationCheckTest extends BaseCheckTest {
 
     @Test
     public void test() throws CheckstyleException {
-        assertThat(checker.process(files), is(5));
+        assertThat(checker.process(files), is(0));
     }
 
     @Before

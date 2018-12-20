@@ -3,6 +3,8 @@ package com.proper.checkstyle;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@Api(tags = "/restController")
+@RestController
 public class PassController {
 
     @ApiOperation("blah blah")
