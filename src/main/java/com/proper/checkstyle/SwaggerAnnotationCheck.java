@@ -29,29 +29,38 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
 
     @Override
     public void visitToken(DetailAST ast) {
-        if (ast.getType() == TokenTypes.CLASS_DEF) {
-            if (AnnotationUtil.containsAnnotation(ast, restController) || AnnotationUtil.containsAnnotation(ast, controller)) {
-                if (AnnotationUtil.containsAnnotation(ast, api)) {
-                    return;
-                }
-            } else {
-                String message = "Failed！The class no have swagger annotation [" + ast.getText() + "]";
-                log(ast.getLineNo(), message);
+        while (classContains(ast)) {
+            return;
+        }
+        if (ast.getType() == TokenTypes.METHOD_DEF) {
+            annotation(ast);
+        }
+    }
+
+    private boolean classContains(DetailAST ast) {
+        if (AnnotationUtil.containsAnnotation(ast, restController) || AnnotationUtil.containsAnnotation(ast, controller)) {
+            if (AnnotationUtil.containsAnnotation(ast, api)) {
+                return true;
             }
-        } else if (ast.getType() == TokenTypes.METHOD_DEF) {
-            for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
-                if (child.getType() == TokenTypes.ANNOTATION) {
-                    final DetailAST detailAST = child.getFirstChild();
-                    final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
-                    if (name.endsWith(mapping)) {
-                        if (AnnotationUtil.containsAnnotation(ast, anno)) {
-                            return;
-                        } else {
-                            String message = "Failed！The methods no have swagger annotation [" + ast.getText() + "]";
-                            log(ast.getLineNo(), message);
-                        }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    private void annotation(DetailAST ast) {
+        for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
+            if (ast.branchContains(TokenTypes.ANNOTATION)) {
+                //if (child.getType() == TokenTypes.ANNOTATION) {
+                final DetailAST detailAST = child.getFirstChild();
+                final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
+                if (name.endsWith(mapping)) {
+                    if (AnnotationUtil.containsAnnotation(ast, anno)) {
+                        return;
+                    } else {
+                        String message = "Failed！The methods no have swagger annotation [" + ast.getText() + "]";
+                        log(ast.getLineNo(), message);
                     }
-                    break;
                 }
             }
         }
