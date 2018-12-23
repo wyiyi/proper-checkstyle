@@ -7,11 +7,11 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 
 /**
- * 校验类中是否包含 '@Controller’或 '@RestController'
- * 仅检查通过注解方式配置的 controller，不检查 xml 方式配置的 controller
+ * 校验被检查的类上是否包含注解 '@Controller’或 '@RestController'
  * 若包含，则检查方法中带Spring 的 'RequestMapping' 注解
  * 如存在，则校验是否存在 Swagger 的 '@ApiOperation' 注解
  *
+ * 注：仅检查通过注解方式配置的 controller，不检查 xml 方式配置的 controller
  */
 public class SwaggerAnnotationCheck extends AbstractCheck {
 
@@ -76,7 +76,7 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
         if (AnnotationUtil.containsAnnotation(ast, anno)) {
             return;
         } else {
-            String message = "[" + ast.getLineNo() + "] must be swagger annotation '@ApiOperation'on the method!";
+            String message = "There must be swagger annotation '@ApiOperation'on the method!";
             log(ast.getLineNo(), message);
         }
     }
