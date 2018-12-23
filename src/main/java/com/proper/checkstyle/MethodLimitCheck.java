@@ -4,9 +4,6 @@ import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
-/**
- * 限制类方法的数量，默认最大值为30
- */
 public class MethodLimitCheck extends AbstractCheck {
     private int max = 30;
 
