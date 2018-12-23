@@ -51,19 +51,27 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
 
     private void annotation(DetailAST ast) {
         if (ast.branchContains(TokenTypes.ANNOTATION)) {
-            for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
-                final DetailAST detailAST = child.getFirstChild();
-                final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
-                if (name.endsWith(mapping)) {
-                    if (AnnotationUtil.containsAnnotation(ast, anno)) {
-                        return;
-                    } else {
-                        String message = "Failed！The methods no have swagger annotation [" + ast.getText() + "]";
-                        log(ast.getLineNo(), message);
-                        break;
-                    }
-                }
+            getChild(ast);
+        }
+    }
+
+    private void getChild(DetailAST ast){
+        for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
+            final DetailAST detailAST = child.getFirstChild();
+            final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
+            if (name.endsWith(mapping)) {
+                valid(ast);
+                break;
             }
+        }
+    }
+
+    private void valid(DetailAST ast){
+        if (AnnotationUtil.containsAnnotation(ast, anno)) {
+            return;
+        } else {
+            String message = "Failed！The methods no have swagger annotation [" + ast.getText() + "]";
+            log(ast.getLineNo(), message);
         }
     }
 
