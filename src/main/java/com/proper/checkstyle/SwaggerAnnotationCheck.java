@@ -24,16 +24,14 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
 
     @Override
     public int[] getDefaultTokens() {
-        return new int[]{TokenTypes.CLASS_DEF, TokenTypes.METHOD_DEF};
+        return new int[]{TokenTypes.CLASS_DEF};
     }
 
     @Override
     public void visitToken(DetailAST ast) {
-        while (classContains(ast)) {
-            return;
-        }
-        if (ast.getType() == TokenTypes.METHOD_DEF) {
-            annotation(ast);
+        if (classContains(ast)) {
+            DetailAST method = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.METHOD_DEF);
+            annotation(method);
         }
     }
 
@@ -49,8 +47,8 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
     }
 
     private void annotation(DetailAST ast) {
-        for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
-            if (ast.branchContains(TokenTypes.ANNOTATION)) {
+        if (ast.branchContains(TokenTypes.ANNOTATION)) {
+            for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
                 //if (child.getType() == TokenTypes.ANNOTATION) {
                 final DetailAST detailAST = child.getFirstChild();
                 final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
