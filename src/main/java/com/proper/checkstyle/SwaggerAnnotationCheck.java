@@ -7,8 +7,11 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 
 /**
- * 校验以Controller.java 结尾的文件中是否包含swagger的注解
+ * 校验类中是否包含 '@Controller’或 '@RestController'
  * 仅检查通过注解方式配置的 controller，不检查 xml 方式配置的 controller
+ * 若包含，则检查方法中带Spring 的 'RequestMapping' 注解
+ * 如存在，则校验是否存在 Swagger 的 '@ApiOperation' 注解
+ *
  */
 public class SwaggerAnnotationCheck extends AbstractCheck {
 
@@ -29,9 +32,12 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
 
     @Override
     public void visitToken(DetailAST ast) {
+        // 过滤Controller 文件并校验在类上是否有 @Api 注解
         if (classContains(ast)) {
+            // 通过 CLASS_DEF 的树节点获取每一个 METHOD_DEF
             DetailAST method = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.METHOD_DEF);
             for (DetailAST detailAST = method; detailAST != null; detailAST = detailAST.getNextSibling()) {
+                // 校验带 @RestquestMapping 的 METHOD_DEF 是否存在 swagger 注解
                 annotation(detailAST);
             }
         }
@@ -42,7 +48,7 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
             if (AnnotationUtil.containsAnnotation(ast, api)) {
                 return true;
             } else {
-                String message = "Failed！The methods no have api annotation [" + ast.getText() + "]";
+                String message = "Failed！There must be swagger annotation '@Api' on the class!";
                 log(ast.getLineNo(), message);
             }
         }
@@ -60,17 +66,17 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
             final DetailAST detailAST = child.getFirstChild();
             final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
             if (name.endsWith(mapping)) {
-                valid(ast);
+                validApiOperation(ast);
                 break;
             }
         }
     }
 
-    private void valid(DetailAST ast) {
+    private void validApiOperation(DetailAST ast) {
         if (AnnotationUtil.containsAnnotation(ast, anno)) {
             return;
         } else {
-            String message = "Failed！The methods no have swagger annotation [" + ast.getText() + "]";
+            String message = "[" + ast.getLineNo() + "] must be swagger annotation '@ApiOperation'on the method!";
             log(ast.getLineNo(), message);
         }
     }
