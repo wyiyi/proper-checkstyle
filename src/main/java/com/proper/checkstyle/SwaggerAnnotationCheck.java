@@ -31,7 +31,9 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
     public void visitToken(DetailAST ast) {
         if (classContains(ast)) {
             DetailAST method = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.METHOD_DEF);
-            annotation(method);
+            for (DetailAST detailAST = method; detailAST != null; detailAST = detailAST.getNextSibling()) {
+                annotation(detailAST);
+            }
         }
     }
 
@@ -39,17 +41,17 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
         if (AnnotationUtil.containsAnnotation(ast, restController) || AnnotationUtil.containsAnnotation(ast, controller)) {
             if (AnnotationUtil.containsAnnotation(ast, api)) {
                 return true;
+            } else {
+                String message = "Failed！The methods no have api annotation [" + ast.getText() + "]";
+                log(ast.getLineNo(), message);
             }
-        } else {
-            return false;
         }
-        return true;
+        return false;
     }
 
     private void annotation(DetailAST ast) {
         if (ast.branchContains(TokenTypes.ANNOTATION)) {
             for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
-                //if (child.getType() == TokenTypes.ANNOTATION) {
                 final DetailAST detailAST = child.getFirstChild();
                 final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
                 if (name.endsWith(mapping)) {
@@ -58,6 +60,7 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
                     } else {
                         String message = "Failed！The methods no have swagger annotation [" + ast.getText() + "]";
                         log(ast.getLineNo(), message);
+                        break;
                     }
                 }
             }
