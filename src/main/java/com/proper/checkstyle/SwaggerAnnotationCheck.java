@@ -55,7 +55,7 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
         }
     }
 
-    private void getChild(DetailAST ast){
+    private void getChild(DetailAST ast) {
         for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
             final DetailAST detailAST = child.getFirstChild();
             final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
@@ -66,7 +66,7 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
         }
     }
 
-    private void valid(DetailAST ast){
+    private void valid(DetailAST ast) {
         if (AnnotationUtil.containsAnnotation(ast, anno)) {
             return;
         } else {
