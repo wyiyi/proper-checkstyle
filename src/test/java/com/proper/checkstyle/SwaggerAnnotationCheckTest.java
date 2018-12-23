@@ -12,7 +12,7 @@ import java.util.List;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class SwaggerCheckTest extends BaseCheckTest {
+public class SwaggerAnnotationCheckTest extends BaseCheckTest {
 
     private Checker checker;
 
@@ -25,7 +25,7 @@ public class SwaggerCheckTest extends BaseCheckTest {
 
     @Before
     public void setUp() throws CheckstyleException {
-        checker = prepareCheckStyleChecker(SwaggerCheck.class, Collections.emptyMap());
+        checker = prepareCheckStyleChecker(SwaggerAnnotationCheck.class, Collections.emptyMap());
         files = prepareFilesToBeChecked();
     }
 
