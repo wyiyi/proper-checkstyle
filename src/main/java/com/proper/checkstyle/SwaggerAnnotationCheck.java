@@ -49,7 +49,7 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
     }
 
     private void annotation(DetailAST ast) {
-        if (ast.branchContains(TokenTypes.ANNOTATION)) {
+        if (ast.branchContains(TokenTypes.ANNOTATION) && ast.getType() == TokenTypes.METHOD_DEF) {
             getChild(ast);
         }
     }
