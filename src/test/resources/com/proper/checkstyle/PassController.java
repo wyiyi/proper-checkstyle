@@ -45,4 +45,22 @@ public class PassController {
         return;
     }
 
+    public static class AdminCatalogVO {
+
+        @ApiModelProperty(name = "‍编码", required = true)
+        private String code;
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String toString() {
+            return JSONUtil.toJSONIgnoreException(this);
+        }
+    }
 }
