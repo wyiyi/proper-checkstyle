@@ -57,10 +57,12 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
     private void getChild(DetailAST ast) {
         for (DetailAST child = AnnotationUtil.getAnnotationHolder(ast).getFirstChild(); child != null; child = child.getNextSibling()) {
             final DetailAST detailAST = child.getFirstChild();
-            final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
-            if (name.endsWith(mapping)) {
-                validApiOperation(ast);
-                break;
+            if (detailAST != null) {
+                final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
+                if (name.endsWith(mapping)) {
+                    validApiOperation(ast);
+                    break;
+                }
             }
         }
     }
