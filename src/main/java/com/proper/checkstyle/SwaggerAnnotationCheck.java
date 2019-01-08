@@ -59,20 +59,19 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
             final DetailAST detailAST = child.getFirstChild();
             if (detailAST != null) {
                 final String name = FullIdent.createFullIdent(detailAST.getNextSibling()).getText();
-                if (name.endsWith(mapping)) {
-                    validApiOperation(ast);
-                    break;
-                }
+                validApiOperation(name, ast);
             }
         }
     }
 
-    private void validApiOperation(DetailAST ast) {
-        if (AnnotationUtil.containsAnnotation(ast, anno)) {
-            return;
-        } else {
-            String message = "There must be swagger annotation '@ApiOperation'on the method!";
-            log(ast.getLineNo(), message);
+    private void validApiOperation(String name, DetailAST ast) {
+        if (name.endsWith(mapping)) {
+            if (AnnotationUtil.containsAnnotation(ast, anno)) {
+                return;
+            } else {
+                String message = "There must be swagger annotation '@ApiOperation'on the method!";
+                log(ast.getLineNo(), message);
+            }
         }
     }
 
