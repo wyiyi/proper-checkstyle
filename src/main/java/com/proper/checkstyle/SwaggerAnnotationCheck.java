@@ -64,7 +64,7 @@ public class SwaggerAnnotationCheck extends AbstractCheck {
      *     |   |   |   |--LPAREN -> ( [17:17]
      *     |   |   |   |--EXPR -> EXPR [17:18]
      *     |   |   |   |   `--STRING_LITERAL ->
-     * @param ast
+     * @param  ast DetailAST
      */
     private void checkMethods(DetailAST ast) {
         // 通过 CLASS_DEF 的树节点获取每一个 METHOD_DEF
